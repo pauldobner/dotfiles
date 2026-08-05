@@ -71,10 +71,12 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 # zsh-autocomplete not used for now
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat conda uv)
+plugins=(git zsh-autosuggestions you-should-use zsh-bat conda uv zsh-syntax-highlighting)
 
+# User-installed commands, including the bat compatibility link created by setup.sh.
+export PATH="$HOME/.local/bin:$PATH"
 
-source $ZSH/oh-my-zsh.sh
+source "$ZSH/oh-my-zsh.sh"
 
 # User configuration
 
@@ -105,24 +107,9 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-. "$HOME/.local/bin/env"
+[[ -r "$HOME/.local/bin/env" ]] && source "$HOME/.local/bin/env"
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/paul/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/paul/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/paul/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/paul/miniconda3/bin:$PATH"
-    fi
+# Load conda when it is installed, without tying this file to one home directory.
+if command -v conda >/dev/null 2>&1; then
+  eval "$(conda shell.zsh hook 2>/dev/null)"
 fi
-unset __conda_setup
-# <<< conda initialize <<<
-
-
-
-# Added by Antigravity CLI installer
-export PATH="/home/paul/.local/bin:$PATH"
