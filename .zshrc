@@ -71,11 +71,13 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 # zsh-autocomplete not used for now
-plugins=(git zsh-autosuggestions you-should-use zsh-bat conda uv zsh-syntax-highlighting)
+plugins=(git zsh-autosuggestions you-should-use zsh-bat conda uv fzf-zsh-plugin zsh-syntax-highlighting)
 
 # User-installed commands, including the bat compatibility link created by setup.sh.
 export PATH="$HOME/.local/bin:$PATH"
 
+fpath+=("${ZSH_CUSTOM:-$ZSH/custom}/plugins/zsh-completions/src")
+autoload -U compinit && compinit
 source "$ZSH/oh-my-zsh.sh"
 
 # User configuration
@@ -113,3 +115,8 @@ source "$ZSH/oh-my-zsh.sh"
 if command -v conda >/dev/null 2>&1; then
   eval "$(conda shell.zsh hook 2>/dev/null)"
 fi
+
+# opencode
+export PATH=/home/paul/.opencode/bin:$PATH
+
+export PATH="/home/paul/.pixi/bin:$PATH"

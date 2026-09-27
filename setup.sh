@@ -179,7 +179,9 @@ install_plugins() {
 
   clone_or_update https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh" "Oh My Zsh"
   clone_or_update https://github.com/zsh-users/zsh-autosuggestions.git "$zsh_custom/plugins/zsh-autosuggestions" "zsh-autosuggestions"
+  clone_or_update https://github.com/zsh-users/zsh-completions.git "$zsh_custom/plugins/zsh-completions" "zsh-completions"
   clone_or_update https://github.com/zsh-users/zsh-syntax-highlighting.git "$zsh_custom/plugins/zsh-syntax-highlighting" "zsh-syntax-highlighting"
+  clone_or_update https://github.com/unixorn/fzf-zsh-plugin.git "$zsh_custom/plugins/fzf-zsh-plugin" "fzf-zsh-plugin"
   clone_or_update https://github.com/MichaelAquilina/zsh-you-should-use.git "$zsh_custom/plugins/you-should-use" "you-should-use"
   clone_or_update https://github.com/fdellwing/zsh-bat.git "$zsh_custom/plugins/zsh-bat" "zsh-bat"
   clone_or_update https://github.com/tmux-plugins/tpm.git "$HOME/.tmux/plugins/tpm" "TPM"

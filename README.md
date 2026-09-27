@@ -107,8 +107,14 @@ ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions.git \
   "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
 
+git clone --depth=1 https://github.com/zsh-users/zsh-completions.git \
+  "$ZSH_CUSTOM/plugins/zsh-completions"
+
 git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git \
   "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+
+git clone --depth=1 https://github.com/unixorn/fzf-zsh-plugin.git \
+  "$ZSH_CUSTOM/plugins/fzf-zsh-plugin"
 
 git clone --depth=1 https://github.com/MichaelAquilina/zsh-you-should-use.git \
   "$ZSH_CUSTOM/plugins/you-should-use"
@@ -122,10 +128,12 @@ The `git`, `conda`, and `uv` plugins come with Oh My Zsh, so they do not need se
 The plugin order is defined in `.zshrc`:
 
 ```sh
-plugins=(git zsh-autosuggestions you-should-use zsh-bat conda uv zsh-syntax-highlighting)
+plugins=(git zsh-autosuggestions you-should-use zsh-bat conda uv fzf-zsh-plugin zsh-syntax-highlighting)
 ```
 
-Keep `zsh-syntax-highlighting` last. It needs to see widgets added by the other plugins before it loads.
+`zsh-completions` is loaded through `fpath` before Oh My Zsh rather than through the plugin list, following its upstream guidance. Keep `zsh-syntax-highlighting` last. It needs to see widgets added by the other plugins before it loads.
+
+On the first Zsh startup, `fzf-zsh-plugin` installs `fzf` in `~/.fzf` if the command is not already available.
 
 ### 4. Link `.zshrc`
 
