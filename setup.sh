@@ -14,6 +14,22 @@ success() { printf '[ OK ] %s\n' "$*"; }
 warn() { printf '[WARN] %s\n' "$*" >&2; }
 die() { printf '[FAIL] %s\n' "$*" >&2; exit 1; }
 
+ensure_usable_term() {
+  local original_term=${TERM:-}
+
+  case "$original_term" in
+    ''|-) ;;
+    *) return ;;
+  esac
+
+  if [[ -t 0 || -t 1 || -t 2 ]]; then
+    export TERM=xterm-256color
+  else
+    export TERM=dumb
+  fi
+  warn "TERM was '${original_term:-unset}'; using '$TERM' for setup"
+}
+
 on_error() {
   local exit_code=$?
   printf '[FAIL] Setup stopped at line %s while running: %s\n' "$1" "$2" >&2
@@ -227,6 +243,7 @@ validate_configuration() {
   fi
 }
 
+ensure_usable_term
 info "Setting up dotfiles from $SCRIPT_DIR"
 [[ "$SKIP_PACKAGES" == true ]] || install_packages
 ensure_bat_command

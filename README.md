@@ -30,12 +30,13 @@ Existing config files are not thrown away. Before creating a link, the script mo
 
 In order, [`setup.sh`](./setup.sh) does the following:
 
-1. Checks for Zsh, tmux, Git, curl, bat, and a C compiler. If something is missing, it installs the package set for the detected package manager.
-2. Links this repo's `.zshrc` and `.tmux.conf` into your home directory. Existing files and incorrect links are backed up first.
-3. Installs Oh My Zsh, the external Zsh plugins, and TPM. Existing Git checkouts are updated with a fast-forward pull as long as they have no local changes.
-4. Asks TPM to install any tmux plugins that are still missing.
-5. Changes the login shell to Zsh when possible.
-6. Checks the Zsh syntax and starts a temporary tmux server to make sure `.tmux.conf` loads.
+1. Replaces a missing `TERM` or the invalid value `TERM=-` for the duration of setup so terminal-aware commands can run safely.
+2. Checks for Zsh, tmux, Git, curl, bat, and a C compiler. If something is missing, it installs the package set for the detected package manager.
+3. Links this repo's `.zshrc` and `.tmux.conf` into your home directory. Existing files and incorrect links are backed up first.
+4. Installs Oh My Zsh, the external Zsh plugins, and TPM. Existing Git checkouts are updated with a fast-forward pull as long as they have no local changes.
+5. Asks TPM to install any tmux plugins that are still missing.
+6. Changes the login shell to Zsh when possible.
+7. Checks the Zsh syntax and starts a temporary tmux server to make sure `.tmux.conf` loads.
 
 If a command fails, setup stops and prints the command and line number. Fix the problem and run it again; completed steps are safe to repeat.
 
@@ -257,6 +258,39 @@ Ctrl+B, Alt+U         Remove plugins that are no longer configured
 For commands that use the prefix, press `Ctrl+B`, release it, then press the second key.
 
 ## Troubleshooting
+
+### Invalid terminal type or garbled console input
+
+The Zsh config repairs `TERM` before Oh My Zsh and its plugins load when a
+console supplies an empty value or `-`. An attached terminal uses
+`xterm-256color`, which matches the Proxmox xterm.js console; a session without
+a terminal uses `dumb`. Every value supplied by a normal terminal, SSH, or tmux
+is left unchanged, including an intentional `TERM=dumb`.
+
+Check the value selected for the current shell with:
+
+```sh
+echo "$TERM"
+```
+
+If `infocmp "$TERM"` reports that a non-empty terminal type is unknown, install
+that terminal's terminfo definition on the machine. Changing a valid terminal
+name can hide missing terminfo data and advertise capabilities that the client
+does not support.
+
+If an already-open Proxmox xterm.js console still echoes characters twice or
+displays garbled output after updating the repo, start a clean shell with:
+
+```sh
+export TERM=xterm-256color
+reset
+exec zsh
+```
+
+The `reset` command repairs echo, input, and other state for the current
+terminal. It is intentionally not run by `setup.sh`; resetting a terminal from
+an installation script would be disruptive. The `.zshrc` change handles the
+invalid terminal type automatically in future Zsh sessions.
 
 Check where the dotfiles point:
 

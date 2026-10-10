@@ -1,6 +1,17 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
+# The Proxmox LXC web console can pass TERM="-". Repair only missing or
+# explicitly invalid values; valid values such as dumb, tmux-256color, and
+# terminal-specific names must continue to describe the actual client.
+if [[ -z ${TERM:-} || $TERM == - ]]; then
+  if [[ -t 0 || -t 1 || -t 2 ]]; then
+    export TERM=xterm-256color
+  else
+    export TERM=dumb
+  fi
+fi
+
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -116,7 +127,5 @@ if command -v conda >/dev/null 2>&1; then
   eval "$(conda shell.zsh hook 2>/dev/null)"
 fi
 
-# opencode
-export PATH=/home/paul/.opencode/bin:$PATH
-
-export PATH="/home/paul/.pixi/bin:$PATH"
+# Optional per-user tools.
+export PATH="$HOME/.opencode/bin:$HOME/.pixi/bin:$PATH"
